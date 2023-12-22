@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GeneradorBloques : MonoBehaviour
 {
+
     public GameObject cuadradoPrefab; // Prefab del cuadrado
-    public List<Color> coloresDisponibles = new List<Color>() { Color.red, Color.blue, Color.green, Color.yellow }; // Lista de colores
+    public List<Sprite> spritesDisponibles; // Lista de sprites disponibles
+    public List<Sprite> spriteRotos; // Lista de sprites rotos
+
     public int filas = 8; // Número de filas de cuadrados
     public int columnas = 10; // Número de columnas de cuadrados
     public float separacionHorizontal = 2.0f; // Separación horizontal entre las matrices de bloques
@@ -28,15 +33,17 @@ public class GeneradorBloques : MonoBehaviour
         {
             for (int columna = 0; columna < columnas; columna++)
             {
-                // Elige un color aleatorio
-                Color colorAleatorio = coloresDisponibles[Random.Range(0, coloresDisponibles.Count)];
+                // Elige un sprite aleatorio
+                Sprite spriteAleatorio = spritesDisponibles[Random.Range(0, spritesDisponibles.Count)];
 
                 // Calcula la posición del cuadrado a la izquierda con separación y margen, ajustada a la posición inicial
                 Vector3 posicionIzquierda = new Vector3(posicionInicialIzquierda + (columna * (separacionVertical + margenHorizontal)), fila * (separacionVertical + margenVertical) - posicionVertical, 0);
 
                 // Instancia un nuevo cuadrado a la izquierda
                 GameObject nuevoCuadradoIzquierda = Instantiate(cuadradoPrefab, posicionIzquierda, Quaternion.identity);
-                nuevoCuadradoIzquierda.GetComponent<SpriteRenderer>().color = colorAleatorio;
+                nuevoCuadradoIzquierda.GetComponent<SpriteRenderer>().sprite = spriteAleatorio;
+
+                nuevoCuadradoIzquierda.transform.localScale = new Vector3(0.6f, 0.6f, 1f); // Cambia la escala 
             }
         }
 
@@ -48,15 +55,17 @@ public class GeneradorBloques : MonoBehaviour
         {
             for (int columna = 0; columna < columnas; columna++)
             {
-                // Elige un color aleatorio
-                Color colorAleatorio = coloresDisponibles[Random.Range(0, coloresDisponibles.Count)];
+                // Elige un sprite aleatorio
+                Sprite spriteAleatorio = spritesDisponibles[Random.Range(0, spritesDisponibles.Count)];
 
                 // Calcula la posición del cuadrado a la derecha con separación horizontal y margen, ajustada a la posición inicial
                 Vector3 posicionDerecha = new Vector3(posicionInicialDerecha + (columna * (separacionVertical + margenHorizontal)), fila * (separacionVertical + margenVertical) - posicionVertical, 0);
 
                 // Instancia un nuevo cuadrado a la derecha
                 GameObject nuevoCuadradoDerecha = Instantiate(cuadradoPrefab, posicionDerecha, Quaternion.identity);
-                nuevoCuadradoDerecha.GetComponent<SpriteRenderer>().color = colorAleatorio;
+                nuevoCuadradoDerecha.GetComponent<SpriteRenderer>().sprite = spriteAleatorio;
+                nuevoCuadradoDerecha.transform.localScale = new Vector3(0.6f, 0.6f, 1f); // Cambia la escala 
+
             }
         }
     }

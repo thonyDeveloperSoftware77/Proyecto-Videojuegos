@@ -30,7 +30,7 @@ public class script : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
             // Reproduce la animación y ajusta la velocidad
-            armatureComponent.animation.Play("der_iz", 1);
+            armatureComponent.animation.Play("frenei", 1);
             armatureComponent.animation.timeScale = 0.5f;
             GetComponent<Rigidbody2D>().AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
             isJumping = true;

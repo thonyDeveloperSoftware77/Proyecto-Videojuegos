@@ -29,25 +29,25 @@ public class EliminaBloque : MonoBehaviour
                 ControlJuego controlJuego = FindObjectOfType<ControlJuego>();
                 if (controlJuego != null)
                 {
-                    string colorBloque = ColorToHex(spriteRenderer.color);
-                    Debug.Log(colorBloque.ToString());
+                    string nombreSprite = spriteRenderer.sprite.name;
+                    Debug.Log(nombreSprite);
 
-                    // Llama a diferentes métodos dependiendo del color del bloque
-                    switch (colorBloque)
+                    // Llama a diferentes métodos dependiendo del nombre del sprite
+                    switch (nombreSprite)
                     {
-                        case "#1A0039":
+                        case "maMorado1":
                             controlJuego.IncrementarBloquesDestruidosMorado();
                             break;
-                        case "#031829":
+                        case "maAzul1":
                             controlJuego.IncrementarBloquesDestruidosAzul();
                             break;
-                        case "#2C0A29":
+                        case "maRosa1":
                             controlJuego.IncrementarBloquesDestruidosRosado();
                             break;
-                        case "#0B0E10":
+                        case "maNegro1":
                             controlJuego.IncrementarBloquesDestruidosNegro();
                             break;
-                            // Agrega más casos para otros colores si es necesario
+                            // Agrega más casos para otros nombres de sprites si es necesario
                     }
                 }
 
