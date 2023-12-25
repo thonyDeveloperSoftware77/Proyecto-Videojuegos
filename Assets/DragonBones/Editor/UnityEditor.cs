@@ -147,12 +147,12 @@ namespace DragonBones
 
             for (int i = 0; i < textureAtlasJSONs.Count; ++i)
             {
-                // Aquí se hardcodea la ruta del archivo
-                string path = "Assets/DragonBones/Demos/Resources/neww/Ninja_tex";
+                string path = textureAtlasJSONs[i];
                 //load textureAtlas data
                 UnityDragonBonesData.TextureAtlas ta = new UnityDragonBonesData.TextureAtlas();
-                ta.textureAtlasJSON = AssetDatabase.LoadAssetAtPath<TextAsset>(path + ".json");
+                ta.textureAtlasJSON = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                 //load texture
+                path = path.Substring(0, path.LastIndexOf(".json"));
                 ta.texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path + ".png");
                 //load material
                 ta.material = AssetDatabase.LoadAssetAtPath<Material>(path + "_Mat.mat");
@@ -162,7 +162,6 @@ namespace DragonBones
 
             return textureAtlas;
         }
-
 
 
         public static bool ChangeDragonBonesData(UnityArmatureComponent _armatureComponent, TextAsset dragonBoneJSON)

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a64e5b0e436d4bed9780211ae245f7b, type: 3}
+  m_Name: Shuriken_Data
+  m_EditorClassIdentifier: 
+  dataName: Shuriken
+  dragonBonesJSON: {fileID: 4900000, guid: add7c28eb4544294a85c5c491bd31c25, type: 3}
+  textureAtlas:
+  - textureAtlasJSON: {fileID: 4900000, guid: 1ad22e5adb98a9f4e88cb91fdf62bad3, type: 3}
+    texture: {fileID: 2800000, guid: dc2726f57dcb0834aa929d0f3d278152, type: 3}
+    material: {fileID: 2100000, guid: b06e08b3e52dc11488d7324dfdc01034, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 5f5e291fb1efadc4ea6a085dcdbbf449, type: 2}
