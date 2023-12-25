@@ -1378,6 +1378,8 @@ MonoBehaviour:
   tiempoMaximo: 20
   slider: {fileID: 1584330679}
   prefab: {fileID: 7646748734711145509, guid: 5bc0aada26bb01646b761ceed4f1b941, type: 3}
+  modalPerder: {fileID: 1155618373}
+  modalGanar: {fileID: 864091744}
   contadorBloquesAzulText: {fileID: 971541822}
   contadorBloquesMoradoText: {fileID: 204210054}
   contadorBloquesRosaText: {fileID: 106842660}
@@ -1420,7 +1422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &864091741
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2419,7 +2421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1155618370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3082,7 +3084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1469898705
 Transform:
   m_ObjectHideFlags: 0

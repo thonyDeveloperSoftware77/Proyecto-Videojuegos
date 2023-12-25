@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class ControlJuego : MonoBehaviour
 {
     Nivel[] niveles = {
-        new Nivel(1, 30f, 5, 5, 5, 5),
-        new Nivel(2, 35f, 10, 10, 10, 10),
-        new Nivel(3, 40f, 15, 15, 15, 15)
+        new Nivel(1, 15f, 5, 5, 5, 5),
+        new Nivel(2, 20f, 10, 10, 10, 10),
+        new Nivel(3, 25f, 15, 15, 15, 15)
     };
 
     ///TEMPORIZADOR
@@ -25,6 +25,12 @@ public class ControlJuego : MonoBehaviour
     private int nivelActual = 1;
 
 
+    //PARA MOSTRAR MODALES
+    public Canvas modalPerder;
+    public Canvas modalGanar;
+
+    //PARA BOTONES
+    public Button botonAceptar; 
 
     public TextMeshProUGUI contadorBloquesAzulText; // Un objeto Text para mostrar el conteo de bloques
     public TextMeshProUGUI contadorBloquesMoradoText; // Un objeto Text para mostrar el conteo de bloques
@@ -89,6 +95,8 @@ public class ControlJuego : MonoBehaviour
         bloquesDestruidosNegro = nivelActual.numNegro;
 
         ActivarTemporizador();
+        // Asigna el evento de clic al botón
+        botonAceptar.onClick.AddListener(RestablecerNivelUno);
     }
 
     void Update()
@@ -147,7 +155,12 @@ public class ControlJuego : MonoBehaviour
         }
         if(tiempoActual <= 0)
         {
-            Debug.Log("Derrota");
+
+            if (modalPerder != null)
+            {
+                // Activa el canvas modalPerder si existe
+                modalPerder.gameObject.SetActive(true);
+            }
             tiempoActivo = false;
         }
     }
@@ -168,4 +181,28 @@ public class ControlJuego : MonoBehaviour
     {
         CambiarTemporizador(false);
     }
+
+    public void RestablecerNivelUno()
+    {
+        // Restablecer el nivel actual
+        nivelActual = 1;
+        Nivel nivel = niveles[0];
+
+        // Restablecer el temporizador y el número de bloques de cada color
+        tiempoMaximo = nivel.segundos;
+        bloquesDestruidosMorado = nivel.numMorado;
+        bloquesDestruidosRosado = nivel.numRosa;
+        bloquesDestruidosAzul = nivel.numAzul;
+        bloquesDestruidosNegro = nivel.numNegro;
+
+        // Restablecer los contadores de bloques destruidos
+        contadorBloquesMoradoText.text = "" + bloquesDestruidosMorado;
+        contadorBloquesAzulText.text = "" + bloquesDestruidosAzul;
+        contadorBloquesRosaText.text = "" + bloquesDestruidosRosado;
+        contadorBloquesNegroText.text = "" + bloquesDestruidosNegro;
+
+        // Restablecer el temporizador
+        ActivarTemporizador();
+    }
+
 }
