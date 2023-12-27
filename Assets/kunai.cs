@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class kunai : MonoBehaviour
 {
+    public AudioSource audioSource; // Referencia al componente AudioSource
+    public AudioClip audioClip; // Referencia al clip de audio
 
     public Transform Kunai;
     public SpriteRenderer KunaiSR;
@@ -26,13 +28,21 @@ public class kunai : MonoBehaviour
         {
             KunaiSR.flipY = false;
         }
+       
+        if (angle >110 && angle <180 || angle >-180 && angle < -133 || angle <70 && angle>0 || angle >-50 && angle <0)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+                Shoot(angle);
+        }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            Shoot();
+        
     }
 
-    void Shoot()
+    void Shoot(float angle)
     {
+        // Reproduce el audio
+        audioSource.PlayOneShot(audioClip);
+        Debug.Log(angle);
         var Ball = Instantiate(kunaiPrefab, Kunai.position, transform.rotation, transform.parent);
         targetRotation.z = 0;
         finaltarget = (targetRotation - transform.position).normalized;

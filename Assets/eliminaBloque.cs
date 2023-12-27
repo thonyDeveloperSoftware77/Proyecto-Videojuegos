@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EliminaBloque : MonoBehaviour
 {
+
+    public AudioSource audioSource; // Referencia al componente AudioSource
+    public AudioClip audioClip; // Referencia al clip de audio
+
     private int contadorColisiones = 0;
     private string[] colores = { "#7400FF", "#C52CBA", "#323E48", "#0F6BB9" };
     private int maxColisiones = 3;
@@ -31,6 +35,8 @@ public class EliminaBloque : MonoBehaviour
                 {
                     string nombreSprite = spriteRenderer.sprite.name;
                     Debug.Log(nombreSprite);
+                    // Reproduce el audio
+                    audioSource.PlayOneShot(audioClip);
 
                     // Llama a diferentes métodos dependiendo del nombre del sprite
                     switch (nombreSprite)

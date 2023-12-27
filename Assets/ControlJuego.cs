@@ -7,10 +7,18 @@ using UnityEngine.UI;
 public class ControlJuego : MonoBehaviour
 {
     Nivel[] niveles = {
-        new Nivel(1, 15f, 5, 5, 5, 5),
-        new Nivel(2, 20f, 10, 10, 10, 10),
-        new Nivel(3, 25f, 15, 15, 15, 15)
+        new Nivel(1, 20f, 5, 5, 5, 5),
+        new Nivel(2, 25f, 10, 10, 10, 10),
+        new Nivel(3, 30f, 6, 6, 6, 6),
+        new Nivel(4, 35f, 7, 7, 7, 7),
+        new Nivel(5, 40f, 8, 8, 8, 8),
+        new Nivel(6, 40f, 9, 9, 9, 9),
+        new Nivel(7, 40f, 10, 10, 10, 10),
     };
+    public AudioSource audioSource; // Referencia al componente AudioSource
+    public AudioClip audioClip; // Referencia al clip de audio
+
+
 
     ///TEMPORIZADOR
     [SerializeField] private float tiempoMaximo;
@@ -31,6 +39,9 @@ public class ControlJuego : MonoBehaviour
 
     //PARA BOTONES
     public Button botonAceptar; 
+    public Button botonAceptaGanar;
+    private GeneradorBloques generadorBloques; // Referencia al script GeneradorBloques
+
 
     public TextMeshProUGUI contadorBloquesAzulText; // Un objeto Text para mostrar el conteo de bloques
     public TextMeshProUGUI contadorBloquesMoradoText; // Un objeto Text para mostrar el conteo de bloques
@@ -82,6 +93,9 @@ public class ControlJuego : MonoBehaviour
 
     private void Start()
     {
+        // Reproduce el audio
+        audioSource.PlayOneShot(audioClip);
+
         // Inicializar el nivel actual
         Nivel nivelActual = niveles[0];
 
@@ -97,13 +111,19 @@ public class ControlJuego : MonoBehaviour
         ActivarTemporizador();
         // Asigna el evento de clic al botón
         botonAceptar.onClick.AddListener(RestablecerNivelUno);
+        botonAceptaGanar.onClick.AddListener(AvanzarNivel);
+
+        generadorBloques = GetComponent<GeneradorBloques>();
     }
 
     void Update()
     {
+        // Definir la posición de aparición más abajo en la pantalla
+        Vector3 posicionInicial = new Vector3(0f, 0.1f, 0f); // Cambia el valor Y según lo necesites
+
         // Actualiza el Text con el valor del conteo de bloques
         //contadorBloquesText.text = "Bloques destruidos: " + bloquesDestruidos;
-        if(tiempoActivo)
+        if (tiempoActivo)
         {
             CambiarContador();
             
@@ -112,7 +132,7 @@ public class ControlJuego : MonoBehaviour
         if (tiempoActual >= 15.0f && tiempoActual <= 15.5f && !prefabInstanciado)
         {
             // Instancia el prefab
-            instanciaPrefab = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            instanciaPrefab = Instantiate(prefab, posicionInicial, Quaternion.identity);
             prefabInstanciado = true; // Actualiza la bandera
         }
         else if (tiempoActual <= 14.5f && instanciaPrefab != null)
@@ -127,21 +147,10 @@ public class ControlJuego : MonoBehaviour
         // Verificar si el nivel actual se ha completado
         if (bloquesDestruidosAzul + bloquesDestruidosMorado + bloquesDestruidosRosado + bloquesDestruidosNegro == 0)
         {
-            // Avanzar al siguiente nivel
-            nivelActual++;
-            contadorNiveles.text = "" + nivelActual;
-            tiempoActivo = false;
-            if (nivelActual < niveles.Length)
-            {
-                // Configurar el temporizador y el número de shurikens para el nuevo nivel
-                tiempoMaximo = niveles[nivelActual].segundos;
-                tiempoActivo = true;
-            }
-            else
-            {
-                // El jugador ha completado todos los niveles
-                Debug.Log("¡Felicidades, has completado todos los niveles!");
-            }
+            DesactivarTemporizador();
+            // Activa el canvas modalGanar si existe
+            modalGanar.gameObject.SetActive(true);
+           
         }
     }
 
@@ -187,7 +196,7 @@ public class ControlJuego : MonoBehaviour
         // Restablecer el nivel actual
         nivelActual = 1;
         Nivel nivel = niveles[0];
-
+        contadorNiveles.text = "" + nivelActual;
         // Restablecer el temporizador y el número de bloques de cada color
         tiempoMaximo = nivel.segundos;
         bloquesDestruidosMorado = nivel.numMorado;
@@ -200,9 +209,79 @@ public class ControlJuego : MonoBehaviour
         contadorBloquesAzulText.text = "" + bloquesDestruidosAzul;
         contadorBloquesRosaText.text = "" + bloquesDestruidosRosado;
         contadorBloquesNegroText.text = "" + bloquesDestruidosNegro;
+        // Encuentra el objeto que contiene el script GeneradorBloques
+        GameObject generadorObjeto = GameObject.Find("Square");
 
+        // Obtén el componente GeneradorBloques del objeto
+        if (generadorObjeto != null)
+        {
+            generadorBloques = generadorObjeto.GetComponent<GeneradorBloques>();
+        }
+
+        if (generadorBloques != null)
+        {
+            // Llama a la función generarBloques() del script GeneradorBloques
+            generadorBloques.generarBloques(nivelActual);
+        }
+        else
+        {
+            Debug.LogError("No se encontró el script GeneradorBloques.");
+        }
         // Restablecer el temporizador
         ActivarTemporizador();
     }
+
+    public void AvanzarNivel()
+    {
+        // Avanzar al siguiente nivel
+        nivelActual++;
+        contadorNiveles.text = "" + nivelActual;
+        tiempoActivo = false;
+        if (nivelActual < niveles.Length)
+        {
+            // Configurar el temporizador y el número de bloques para el nuevo nivel
+            Nivel nivel = niveles[nivelActual];
+            tiempoMaximo = nivel.segundos;
+            bloquesDestruidosMorado = nivel.numMorado;
+            bloquesDestruidosRosado = nivel.numRosa;
+            bloquesDestruidosAzul = nivel.numAzul;
+            bloquesDestruidosNegro = nivel.numNegro;
+
+            // Restablecer los contadores de bloques destruidos
+            contadorBloquesMoradoText.text = "" + bloquesDestruidosMorado;
+             contadorBloquesAzulText.text = "" + bloquesDestruidosAzul;
+            contadorBloquesRosaText.text = "" + bloquesDestruidosRosado;
+            contadorBloquesNegroText.text = "" + bloquesDestruidosNegro;
+
+
+
+            // Encuentra el objeto que contiene el script GeneradorBloques
+            GameObject generadorObjeto = GameObject.Find("Square");
+
+            // Obtén el componente GeneradorBloques del objeto
+            if (generadorObjeto != null)
+            {
+                generadorBloques = generadorObjeto.GetComponent<GeneradorBloques>();
+            }
+
+            if (generadorBloques != null)
+            {
+                // Llama a la función generarBloques() del script GeneradorBloques
+                generadorBloques.generarBloques(nivelActual);
+            }
+            else
+            {
+                Debug.LogError("No se encontró el script GeneradorBloques.");
+            }
+
+            ActivarTemporizador();
+        }
+        else
+        {
+            // El jugador ha completado todos los niveles
+            Debug.Log("¡Felicidades, has completado todos los niveles!");
+        }
+    }
+
 
 }

@@ -10,7 +10,7 @@ public class script : MonoBehaviour
     // Start is called before the first frame update
     public float speed = 10.0f; // Velocidad de movimiento
     public float jumpForce = 5.0f; // Fuerza del salto
-    private bool isJumping = false; // Para controlar el salto
+    private int isJumping = 0; // Para controlar el salto
     private UnityArmatureComponent armatureComponent; // Para controlar las animaciones
     float animationDelay = 0.05f;  // Retraso de 50 milisegundos
     float timeSinceAnimationStart = 0f;
@@ -25,15 +25,15 @@ public class script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(isJumping);
         // Salto
-        if (Input.GetButtonDown("Jump") && !isJumping)
+        if (Input.GetButtonDown("Jump") && isJumping < 3) // Cambié <3 a <2 para permitir dos saltos
         {
             // Reproduce la animación y ajusta la velocidad
             armatureComponent.animation.Play("frenei", 1);
             armatureComponent.animation.timeScale = 0.5f;
-            GetComponent<Rigidbody2D>().AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);
-            isJumping = true;
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            isJumping++;
         }
         // Si el personaje no está en movimiento, ejecuta la animación "quieto"
         /*if (!isMoving)
@@ -47,7 +47,7 @@ public class script : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Suelo"))
         {
-            isJumping = false;
+            isJumping = 0;
         }
     }
 }
