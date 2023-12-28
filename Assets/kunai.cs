@@ -8,11 +8,13 @@ public class kunai : MonoBehaviour
     public AudioClip audioClip; // Referencia al clip de audio
 
     public Transform Kunai;
+    private int tipoKunai;
     public SpriteRenderer KunaiSR;
     public int speedball;
     Vector3 targetRotation;
 
     public GameObject kunaiPrefab;
+    public GameObject kunaiPrefab2;
     Vector3 finaltarget;
 
     private void Update()
@@ -38,18 +40,46 @@ public class kunai : MonoBehaviour
         
     }
 
+
     void Shoot(float angle)
     {
         // Reproduce el audio
         audioSource.PlayOneShot(audioClip);
         Debug.Log(angle);
-        var Ball = Instantiate(kunaiPrefab, Kunai.position, transform.rotation, transform.parent);
-        targetRotation.z = 0;
-        finaltarget = (targetRotation - transform.position).normalized;
-        // Utiliza la función AddForce para aplicar una fuerza al objeto Ball
-        Ball.GetComponent<Rigidbody2D>().AddForce(finaltarget * speedball, ForceMode2D.Impulse);
-        // Destruye el objeto Ball después de 3 segundos
-        Destroy(Ball, 3.0f);
+
+        if(tipoKunai == 0)
+        {
+            var Ball = Instantiate(kunaiPrefab, Kunai.position, transform.rotation, transform.parent);
+
+
+            targetRotation.z = 0;
+            finaltarget = (targetRotation - transform.position).normalized;
+            // Utiliza la función AddForce para aplicar una fuerza al objeto Ball
+            Ball.GetComponent<Rigidbody2D>().AddForce(finaltarget * speedball, ForceMode2D.Impulse);
+            // Destruye el objeto Ball después de 3 segundos
+            Destroy(Ball, 3.0f);
+        }else if(tipoKunai == 1)
+        {
+             var Ball = Instantiate(kunaiPrefab2, Kunai.position, transform.rotation, transform.parent);
+
+
+            targetRotation.z = 0;
+            finaltarget = (targetRotation - transform.position).normalized;
+            // Utiliza la función AddForce para aplicar una fuerza al objeto Ball
+            Ball.GetComponent<Rigidbody2D>().AddForce(finaltarget * speedball, ForceMode2D.Impulse);
+            // Destruye el objeto Ball después de 3 segundos
+            Destroy(Ball, 3.0f);
+        }
+       
+    }
+
+    public void CambiarKunaiDos()
+    {
+       tipoKunai = 1;
+    }   
+    public void CambiarKunaiUno()
+    {
+        tipoKunai = 0;
     }
 
 }

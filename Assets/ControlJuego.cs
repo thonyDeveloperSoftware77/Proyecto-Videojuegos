@@ -17,7 +17,7 @@ public class ControlJuego : MonoBehaviour
     };
     public AudioSource audioSource; // Referencia al componente AudioSource
     public AudioClip audioClip; // Referencia al clip de audio
-
+    public GameObject jugador; // Prefab del cuadrado
 
 
     ///TEMPORIZADOR
@@ -93,6 +93,9 @@ public class ControlJuego : MonoBehaviour
 
     private void Start()
     {
+        kunai controlKunai = FindObjectOfType<kunai>();
+
+        controlKunai.CambiarKunaiUno();
         // Reproduce el audio
         audioSource.PlayOneShot(audioClip);
 
@@ -114,12 +117,16 @@ public class ControlJuego : MonoBehaviour
         botonAceptaGanar.onClick.AddListener(AvanzarNivel);
 
         generadorBloques = GetComponent<GeneradorBloques>();
+        // Calcula la posición del cuadrado a la izquierda con separación y margen, ajustada a la posición inicial
+        Vector3 posicionIzquierda = new Vector3(0,0.2f, 1f);
+
+        GameObject nuevoCuadradoIzquierda = Instantiate(jugador, posicionIzquierda, Quaternion.identity);
     }
 
     void Update()
     {
         // Definir la posición de aparición más abajo en la pantalla
-        Vector3 posicionInicial = new Vector3(0f, 0.1f, 0f); // Cambia el valor Y según lo necesites
+        Vector3 posicionInicial = new Vector3(0f, 0.05f, 0f); // Cambia el valor Y según lo necesites
 
         // Actualiza el Text con el valor del conteo de bloques
         //contadorBloquesText.text = "Bloques destruidos: " + bloquesDestruidos;
@@ -129,18 +136,18 @@ public class ControlJuego : MonoBehaviour
             
         }
         // Si el tiempo actual es 10 y el prefab aún no se ha instanciado
-        if (tiempoActual >= 15.0f && tiempoActual <= 15.5f && !prefabInstanciado)
-        {
-            // Instancia el prefab
-            instanciaPrefab = Instantiate(prefab, posicionInicial, Quaternion.identity);
-            prefabInstanciado = true; // Actualiza la bandera
-        }
-        else if (tiempoActual <= 14.5f && instanciaPrefab != null)
-        {
-            // Destruye la instancia del prefab después de un cierto tiempo
-            Destroy(instanciaPrefab, 5f); // Cambia 5f al número de segundos que quieras que el prefab permanezca antes de ser destruido
-            instanciaPrefab = null; // Actualiza la referencia a la instancia del prefab
-        }
+        //if (tiempoActual >= 15.0f && tiempoActual <= 15.5f && !prefabInstanciado)
+        //{
+        //    // Instancia el prefab
+        //    instanciaPrefab = Instantiate(prefab, posicionInicial, Quaternion.identity);
+        //    prefabInstanciado = true; // Actualiza la bandera
+        //}
+        //else if (tiempoActual <= 14.5f && instanciaPrefab != null)
+        //{
+        //    // Destruye la instancia del prefab después de un cierto tiempo
+        //    Destroy(instanciaPrefab, 5f); // Cambia 5f al número de segundos que quieras que el prefab permanezca antes de ser destruido
+        //    instanciaPrefab = null; // Actualiza la referencia a la instancia del prefab
+        //}
 
 
         //PARA CONTROL DE NIVELES
@@ -194,6 +201,9 @@ public class ControlJuego : MonoBehaviour
     public void RestablecerNivelUno()
     {
         // Restablecer el nivel actual
+        kunai controlKunai = FindObjectOfType<kunai>();
+
+        controlKunai.CambiarKunaiUno();
         nivelActual = 1;
         Nivel nivel = niveles[0];
         contadorNiveles.text = "" + nivelActual;
@@ -235,6 +245,9 @@ public class ControlJuego : MonoBehaviour
     {
         // Avanzar al siguiente nivel
         nivelActual++;
+        kunai controlKunai = FindObjectOfType<kunai>();
+
+        controlKunai.CambiarKunaiDos();
         contadorNiveles.text = "" + nivelActual;
         tiempoActivo = false;
         if (nivelActual < niveles.Length)
